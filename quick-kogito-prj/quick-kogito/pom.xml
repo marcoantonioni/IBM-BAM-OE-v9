@@ -19,7 +19,7 @@
     <!-- ADDED -->
     <kogito.bom.group-id>com.ibm.bamoe</kogito.bom.group-id>
     <kogito.bom.artifact-id>bamoe-bom</kogito.bom.artifact-id>
-    <kogito.bom.version>9.0.0.Final</kogito.bom.version>    
+    <kogito.bom.version>9.0.1.Final</kogito.bom.version>    
 
   </properties>
   <dependencyManagement>
@@ -41,6 +41,7 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <!--
       <dependency>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-kogito-bom</artifactId>
@@ -48,6 +49,8 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      -->
+
     </dependencies>
   </dependencyManagement>
   <dependencies>
