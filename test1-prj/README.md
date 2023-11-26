@@ -1,19 +1,4 @@
-# IBM-BAM-OE-v9
-
-
-
-## Maven local repo setup
-https://www.ibm.com/docs/en/ibamoe/9.0.x?topic=started-initial-project-setup-walkthrough
-
-```
-# add to local maven registry the supported BAMOE repo, for example
-
-mvn install:install-file -DgroupId=com.ibm.bamoe -DartifactId=bamoe-bom -Dversion=9.0.1.Final -Dpackaging=jar -Dfile=/...your path.../bamoe-9.0.1-maven-repository.zip
-
-# now BAMOE repo is in folder
-ls -al # repo ~/.m2/repository/com/ibm/bamoe/bamoe-bom/9.0.1.Final/
-
-```
+# Project test1
 
 ## Add bamoe-bom, kogito-bom and bamoe-ilmt-compliance-quarkus-pamoe dependencies
 ```
@@ -56,6 +41,31 @@ ls -al # repo ~/.m2/repository/com/ibm/bamoe/bamoe-bom/9.0.1.Final/
     </dependency>
 
 ```
+
+## create maven project
+```
+PRJ_GROUP_ID=marco.bamoe9
+PRJ_VER=1.0.0
+ARTIFACT_ID=${PRJ_NAME}
+PLATF_VER=2.16.7.Final
+
+mvn io.quarkus:quarkus-maven-plugin:${PLATF_VER}:create \
+    -DprojectGroupId=${PRJ_GROUP_ID} \
+    -DprojectArtifactId=${ARTIFACT_ID} \
+    -DprojectVersion=${PRJ_VER} \
+    -DplatformVersion=${PLATF_VER} \
+    -DplatformGroupId=io.quarkus.platform \
+    -DplatformArtifactId=quarkus-bom \
+    -Dextensions=resteasy-reactive-jackson,quarkus-smallrye-openapi,quarkus-smallrye-health
+
+cd ./${ARTIFACT_ID}
+```
+
+## Update pom.xml with BAMOE dependencies
+```
+code pom.xml
+```
+
 ## Rebuild project
 ```
 mvn clean package
