@@ -78,3 +78,37 @@ mvn quarkus:dev
 
 ## Browse to
 http://localhost:8080/q/swagger-ui/#/
+
+## Create image, test locally, push into registry, deploy in CloudEngine, run remote
+```
+podman login -u $QUAY_USER -p $QUAY_PWD quay.io
+
+REPO_NAME=marco_antonioni
+podman build -f src/main/docker/Dockerfile.jvm -t quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest .
+podman images | grep ${ARTIFACT_ID}
+podman push quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest
+
+podman run -it --rm --name ${ARTIFACT_ID} -p 8080:8080 -t quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest
+
+APP_URL=http://localhost:8080/myrule
+curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":12}' && echo
+curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":31}' && echo
+
+# CloudEngine
+ibmcloud ce project create --name ${ARTIFACT_ID}
+ibmcloud ce project select -n ${ARTIFACT_ID}
+ibmcloud ce application create --name ${ARTIFACT_ID} --cpu 0.125 --memory 1G --image quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest
+ibmcloud ce application get -n ${ARTIFACT_ID}
+
+APP_URL=$(ibmcloud ce application get -n ${ARTIFACT_ID} | grep ^URL: | awk '{print $2}')"/myrule"
+echo ${APP_URL}
+
+curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":12}' && echo
+curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":31}' && echo
+
+ibmcloud ce application delete --name ${ARTIFACT_ID} --force
+ibmcloud ce project delete --name ${ARTIFACT_ID} --force
+```
+
+
+
