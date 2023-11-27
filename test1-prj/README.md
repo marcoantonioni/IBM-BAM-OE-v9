@@ -44,6 +44,7 @@
 
 ## create maven project
 ```
+PRJ_NAME=test1
 PRJ_GROUP_ID=marco.bamoe9
 PRJ_VER=1.0.0
 ARTIFACT_ID=${PRJ_NAME}
@@ -95,9 +96,10 @@ curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":12}' && e
 curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":31}' && echo
 
 # CloudEngine
-ibmcloud ce project create --name ${ARTIFACT_ID}
-ibmcloud ce project select -n ${ARTIFACT_ID}
-ibmcloud ce application create --name ${ARTIFACT_ID} --cpu 0.125 --memory 1G --image quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest
+ibmcloud ce project create --name ${ARTIFACT_ID}"-prj"
+ibmcloud ce project select -n ${ARTIFACT_ID}"-prj"
+
+ibmcloud ce application create --name ${ARTIFACT_ID} --cpu 0.5 --memory 1G --scale-down-delay 120 --image quay.io/${REPO_NAME}/${ARTIFACT_ID}:latest
 ibmcloud ce application get -n ${ARTIFACT_ID}
 
 APP_URL=$(ibmcloud ce application get -n ${ARTIFACT_ID} | grep ^URL: | awk '{print $2}')"/myrule"
@@ -107,7 +109,8 @@ curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":12}' && e
 curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":31}' && echo
 
 ibmcloud ce application delete --name ${ARTIFACT_ID} --force
-ibmcloud ce project delete --name ${ARTIFACT_ID} --force
+ibmcloud ce project delete --name ${ARTIFACT_ID} --force --hard
+
 ```
 
 
