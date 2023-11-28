@@ -95,6 +95,11 @@ APP_URL=http://localhost:8080/myrule
 curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":12}' && echo
 curl -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Age":31}' && echo
 
+APP_URL=http://localhost:8080/viprule
+curl -s -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Customer":{"name":"John","age":44,"amountSpent":800}}' | jq . && echo
+curl -s -H 'Content-Type: application/json' -X POST ${APP_URL} -d '{"Customer":{"name":"John","age":44,"amountSpent":2000}}' | jq . && echo
+
+
 # CloudEngine
 ibmcloud ce project create --name ${ARTIFACT_ID}"-prj"
 ibmcloud ce project select -n ${ARTIFACT_ID}"-prj"
